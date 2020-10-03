@@ -1,10 +1,12 @@
 package edu.up.strategogamestate;
 
 /**
- * tells state of individual board square, tells whether it is occupied, what piece is on it
+ * tells state of individual board square, tells whether it is occupied, what piece is on it, coordinates, etc
  */
 public class BoardSquare {
-    Boolean occupied = false;
-    Boolean highlight = false;
-
+    private Boolean occupied;
+    private Boolean highlight;
+    private GamePiece piece;
+    private int xPos;
+    private int yPos;
 }
