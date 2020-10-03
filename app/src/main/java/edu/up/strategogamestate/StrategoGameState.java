@@ -70,6 +70,8 @@ public class StrategoGameState {
 
         //otherwise compare numerical rank
 
+        //depending on ranking, either one or both pieces will have their captured value change and be moved to the graveyard
+
         return true;
     }
 

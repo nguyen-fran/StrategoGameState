@@ -25,4 +25,23 @@ public class GamePiece {
     }
 
     //getters/setters
+    public int getRank(){
+        return rank;
+    }
+    public boolean getTeam(){
+        return team;
+    }
+    public boolean getVisible(){
+        return visible;
+    }
+    public boolean getCaptured(){
+        return captured;
+    }
+
+    public void setVisible(boolean visible){
+        this.visible = visible;
+    }
+    public void setCaptured(boolean captured){
+        this.captured = captured;
+    }
 }
