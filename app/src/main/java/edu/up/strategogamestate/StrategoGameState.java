@@ -9,14 +9,13 @@ public class StrategoGameState {
     private int[] oppGY = new int[11];
 
     private BoardSquare[][] boardSquares;
-    private GamePiece[][] gamePieces;
 
     private final int BOARD_SIZE = 10;
     public static final boolean BLUE = true;
     public static final boolean RED = false;
 
-    //in order of bombs, 10, 9, ..., 2, 1, flag
-    private int[] numOfPieces = {6, 1, 1, 2, 3, 4, 4, 4, 5, 8, 1, 1};
+    //in order of flag, 1, 2, ..., 9, 10, bomb
+    private int[] numOfPieces = {1, 1, 8, 5, 4, 4, 4, 3, 2, 1, 1, 6};
 
     public StrategoGameState() {
         gamePhase = false;
@@ -26,16 +25,28 @@ public class StrategoGameState {
             oppGY[i] = 0;
         }
 
-        for (int j = 0; j < BOARD_SIZE; j++) {
+        this.makeTeam(0, RED);
+        this.makeTeam(6, BLUE);
+
+
+    }
+
+    public void makeTeam(int startRow, boolean team) {
+        int numOfPiecesIndex = 0;
+        for (int j = startRow; j < startRow + 4; j++) {
             for (int k = 0; k < BOARD_SIZE; k++) {
-                for (int l = 0; l < numOfPieces[k]; l++) {
-                    boardSquares[j][k] = new BoardSquare();
-                    gamePieces[j][k] = new GamePiece();
+                for (int l = 0; l < numOfPieces[numOfPiecesIndex]; l++) {
+                    if (k >= BOARD_SIZE) {
+                        j++;
+                        k = 0;
+                    }
+                    GamePiece piece = new GamePiece(l, team, team, false);
+                    boardSquares[j][k] = new BoardSquare(true, piece, j, k);
                     k++;
                 }
+                numOfPiecesIndex++;
             }
         }
-
     }
 
     /**
@@ -54,7 +65,6 @@ public class StrategoGameState {
         for (int j = 0; j < BOARD_SIZE; j++) {
             for (int k = 0; k < BOARD_SIZE; k++) {
                 boardSquares[j][k] = new BoardSquare(orig.boardSquares[j][k]);
-                gamePieces[j][k] = new GamePiece(orig.gamePieces[j][k]);
             }
         }
 

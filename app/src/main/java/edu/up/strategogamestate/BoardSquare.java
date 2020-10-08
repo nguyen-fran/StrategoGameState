@@ -10,10 +10,10 @@ public class BoardSquare {
     private int xPos;
     private int yPos;
 
-    public BoardSquare(boolean occupied, int xPos, int yPos){
+    public BoardSquare(boolean occupied, GamePiece piece, int xPos, int yPos){
         this.occupied = occupied;
         this.highlight = false;
-        piece = new GamePiece();
+        this.piece = piece;
         this.xPos = xPos;
         this.yPos = yPos;
     }
