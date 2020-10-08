@@ -13,6 +13,8 @@ public class StrategoGameState {
     private final int BOARD_SIZE = 10;
     public static final boolean BLUE = true;
     public static final boolean RED = false;
+    public static final boolean HUMANTURN = true;
+    public static final boolean COMPTURN = false;
 
     //in order of flag, 1, 2, ..., 9, 10, bomb
     private int[] numOfPieces = {1, 1, 8, 5, 4, 4, 4, 3, 2, 1, 1, 6};
@@ -71,35 +73,115 @@ public class StrategoGameState {
     }
 
     /**
-     *
+     *method for moving the piece on a given board square to another square
+     * TODO: see if it's possible to make this nicer looking, reduce amount of if/else statements
      * @param square
      * @param newX
      * @param newY
      * @return
      */
     public boolean move(BoardSquare square, int newX, int newY){
-        //check if it's the player's turn
+        GamePiece piece = square.getPiece();
 
-        //check if coordinates you want to move to are in range and valid for piece (special exception for scout range)
+        //check if it's the player's turn (if not, then move is illegal)
+        if(canMove( HUMANTURN /*current player, don't have player classes in yet so defaulting to human*/) == false){
+            return false;
+        }
 
-        //then go through 2d array of pieces to find board square that you are trying to move to
+        //check if coordinates you want to move to are in range and valid for piece (special exception for scout range, and immobile pieces)
+        if(piece.getRank() == 2){ //special movement range for scout
+            //TODO: special movement logic here (may need to make helper method)
+        } else if(piece.getRank() == 11 || piece.getRank() == 0){ //immobile pieces (cannot move)
+            return false;
+        }else{ //all other pieces have normal movement range (check if square is in range)
+            if(newX > square.getxPos() + 1 || newX < square.getxPos() - 1 ||
+               newY > square.getyPos() + 1 || newY < square.getyPos() - 1){
+                return false;
+            }
+        }
 
-        //check if coordinates you are looking at are occupied, if so, check if there's a piece there or it's null (like with the lakes)
 
-        //call attack method to compare the two pieces
+        //if new coords are occupied by another piece (not null), then attack
+        if(boardSquares[newX][newY].getOccupied() == true && boardSquares[newX][newY].getPiece() == null){
+            return false;
+        }else if(boardSquares[newX][newY].getOccupied() == true){
+            attack(square.getPiece(), boardSquares[newX][newY].getPiece());
+        }
 
-        //change occupied/piece variables on current board square as well as the square you are moving to
+        //if current board piece is now captured, then remove piece from square (potential graveyard update happens in attack method)
+        //if not, then update new board square
+        if(square.getPiece().getCaptured() == true){
+            square.setPiece(null);
+        }else{
+            boardSquares[newX][newY].setPiece(square.getPiece());
+            square.setPiece(null);
+        }
 
         return true;
     }
 
-    //attack (helper method used in move method)
+    /** TODO: fill this method out
+     * method for logic of attacks between pieces
+     * determines which piece (or both) get captured and sent to the graveyard
+     * @param piece1
+     * @param piece2
+     * @return
+     */
     public boolean attack(GamePiece piece1, GamePiece piece2){
-        //first check for special cases
+        //first check for special cases (bomb, spy, miner)
 
         //otherwise compare numerical rank
 
+        //depending on ranking, either one or both pieces will have their captured value change
+
+        //update graveyard(s)
+
         return true;
     }
 
+    /**
+     * helper method to check if a given player can make a move or not
+     * @param playerId Id of the current player
+     * @return true if they can move, false if they can't
+     */
+    public boolean canMove(boolean playerId){
+        if(playerId == getPlayerTurn()){
+            return true;
+        }else{
+            return false;
+        }
+    }
+
+    //getters and setters
+    public boolean getGamePhase(){
+        return gamePhase;
+    }
+    public boolean getPlayerTurn(){
+        return playerTurn;
+    }
+    public int[] getPlayerGY(){
+        return playerGY;
+    }
+    public int[] getOppGY() {
+        return oppGY;
+    }
+    public BoardSquare[][] getBoardSquares() {
+        return boardSquares;
+    }
+
+    public void setGamePhase(boolean gamePhase){
+        this.gamePhase = gamePhase;
+    }
+    public void setPlayerTurn(boolean playerTurn) {
+        this.playerTurn = playerTurn;
+    }
+    public void setPlayerGY(int[] playerGY) {
+        this.playerGY = playerGY;
+    }
+    public void setOppGY(int[] oppGY) {
+        this.oppGY = oppGY;
+    }
+    public void setBoardSquares(BoardSquare[][] boardSquares) {
+        this.boardSquares = boardSquares;
+    }
 }
