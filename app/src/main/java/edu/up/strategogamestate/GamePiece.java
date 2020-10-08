@@ -24,6 +24,13 @@ public class GamePiece {
         this.captured = captured;
     }
 
+    public GamePiece(GamePiece orig) {
+        this.rank = orig.rank;
+        this.team = orig.team;
+        this.visible = orig.visible;
+        this.captured = orig.captured;
+    }
+
     //getters/setters
     public int getRank(){
         return rank;
