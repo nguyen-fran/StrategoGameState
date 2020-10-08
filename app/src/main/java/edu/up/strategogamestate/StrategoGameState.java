@@ -15,6 +15,9 @@ public class StrategoGameState {
     public static final boolean BLUE = true;
     public static final boolean RED = false;
 
+    //in order of bombs, 10, 9, ..., 2, 1, flag
+    private int[] numOfPieces = {6, 1, 1, 2, 3, 4, 4, 4, 5, 8, 1, 1};
+
     public StrategoGameState() {
         gamePhase = false;
         playerTurn = true;  //should it be true to start?
@@ -25,8 +28,11 @@ public class StrategoGameState {
 
         for (int j = 0; j < BOARD_SIZE; j++) {
             for (int k = 0; k < BOARD_SIZE; k++) {
-                boardSquares[j][k] = new BoardSquare();
-                gamePieces[j][k] = new GamePiece();
+                for (int l = 0; l < numOfPieces[k]; l++) {
+                    boardSquares[j][k] = new BoardSquare();
+                    gamePieces[j][k] = new GamePiece();
+                    k++;
+                }
             }
         }
 
