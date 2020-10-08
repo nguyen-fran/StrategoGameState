@@ -42,7 +42,7 @@ public class StrategoGameState {
     }
 
     /**
-     *
+     *method for moving the piece on a given board square to another square
      * @param square
      * @param newX
      * @param newY
@@ -51,7 +51,8 @@ public class StrategoGameState {
     public boolean move(BoardSquare square, int newX, int newY){
         //check if it's the player's turn
 
-        //check if coordinates you want to move to are in range and valid for piece (special exception for scout range)
+        //check if coordinates you want to move to are in range and valid for piece (special exception for scout range, and immobile pieces)
+        //scout may need more complicated logic, i don't think it can jump over pieces (would need to check everything in a straight line?)
 
         //then go through 2d array of pieces to find board square that you are trying to move to
 
@@ -64,7 +65,12 @@ public class StrategoGameState {
         return true;
     }
 
-    //attack (helper method used in move method)
+    /**
+     *
+     * @param piece1
+     * @param piece2
+     * @return
+     */
     public boolean attack(GamePiece piece1, GamePiece piece2){
         //first check for special cases
 
