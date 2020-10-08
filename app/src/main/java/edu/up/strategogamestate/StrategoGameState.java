@@ -11,7 +11,7 @@ public class StrategoGameState {
     private BoardSquare[][] boardSquares;
     private GamePiece[][] gamePieces;
 
-    private final int boardSize = 10;
+    private final int BOARD_SIZE = 10;
     public static final boolean BLUE = true;
     public static final boolean RED = false;
 
@@ -23,8 +23,8 @@ public class StrategoGameState {
             oppGY[i] = 0;
         }
 
-        for (int j = 0; j < boardSize; j++) {
-            for (int k = 0; k < boardSize; k++) {
+        for (int j = 0; j < BOARD_SIZE; j++) {
+            for (int k = 0; k < BOARD_SIZE; k++) {
                 boardSquares[j][k] = new BoardSquare();
                 gamePieces[j][k] = new GamePiece();
             }
@@ -45,8 +45,8 @@ public class StrategoGameState {
             this.oppGY[i] = orig.oppGY[i];
         }
 
-        for (int j = 0; j < boardSize; j++) {
-            for (int k = 0; k < boardSize; k++) {
+        for (int j = 0; j < BOARD_SIZE; j++) {
+            for (int k = 0; k < BOARD_SIZE; k++) {
                 boardSquares[j][k] = new BoardSquare(orig.boardSquares[j][k]);
                 gamePieces[j][k] = new GamePiece(orig.gamePieces[j][k]);
             }

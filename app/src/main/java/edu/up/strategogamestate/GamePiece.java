@@ -4,7 +4,7 @@ package edu.up.strategogamestate;
  * describes an individual game piece/unit (rank, team, etc)
  */
 public class GamePiece {
-    private int rank;
+    private int rank;   //bombs are 11, flags are 12 (?)
     private boolean team;
     private boolean visible;
     private boolean captured;
@@ -22,6 +22,13 @@ public class GamePiece {
         this.team = team;
         this.visible = visible;
         this.captured = captured;
+    }
+
+    public GamePiece(GamePiece orig) {
+        this.rank = orig.rank;
+        this.team = orig.team;
+        this.visible = orig.visible;
+        this.captured = orig.captured;
     }
 
     //getters/setters

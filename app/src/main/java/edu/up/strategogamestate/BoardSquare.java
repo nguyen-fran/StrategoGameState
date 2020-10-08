@@ -10,9 +10,19 @@ public class BoardSquare {
     private int xPos;
     private int yPos;
 
-    BoardSquare(){
-
+    public BoardSquare(boolean occupied, int xPos, int yPos){
+        this.occupied = occupied;
+        this.highlight = false;
+        piece = new GamePiece();
+        this.xPos = xPos;
+        this.yPos = yPos;
     }
 
-
+    public BoardSquare(BoardSquare orig) {
+        this.occupied = orig.occupied;
+        this.highlight = orig.highlight;
+        this.piece = new GamePiece(orig.piece);
+        this.xPos = orig.xPos;
+        this.yPos = orig.yPos;
+    }
 }
