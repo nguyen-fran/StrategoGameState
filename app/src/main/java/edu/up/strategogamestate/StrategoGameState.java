@@ -3,13 +3,13 @@ package edu.up.strategogamestate;
 public class StrategoGameState {
     //Stratego only has two phases: setup and main gameplay
     //false if setup, true if main gameplay
-    boolean gamePhase;
-    boolean playerTurn; //true if player's turn, false if com's turn
-    int[] playerGY = new int[11];
-    int[] oppGY = new int[11];
+    private boolean gamePhase;
+    private boolean playerTurn; //true if player's turn, false if com's turn
+    private int[] playerGY = new int[11];
+    private int[] oppGY = new int[11];
 
-    BoardSquare[][] boardSquares;
-    GamePiece[][] gamePieces;
+    private BoardSquare[][] boardSquares;
+    private GamePiece[][] gamePieces;
 
     private final int boardSize = 10;
     public static final boolean BLUE = true;
@@ -38,6 +38,19 @@ public class StrategoGameState {
      * @param orig
      */
     public StrategoGameState(StrategoGameState orig) {
+        this.gamePhase = orig.gamePhase;
+        this.playerTurn = orig.playerTurn;
+        for (int i = 0; i < playerGY.length; i++) {
+            this.playerGY[i] = orig.playerGY[i];
+            this.oppGY[i] = orig.oppGY[i];
+        }
+
+        for (int j = 0; j < boardSize; j++) {
+            for (int k = 0; k < boardSize; k++) {
+                boardSquares[j][k] = new BoardSquare(orig.boardSquares[j][k]);
+                gamePieces[j][k] = new GamePiece(orig.gamePieces[j][k]);
+            }
+        }
 
     }
 
