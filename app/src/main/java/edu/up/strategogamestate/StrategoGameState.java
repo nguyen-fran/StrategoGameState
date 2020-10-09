@@ -29,8 +29,7 @@ public class StrategoGameState {
 
         this.makeTeam(0, RED);
         this.makeTeam(6, BLUE);
-
-
+        
     }
 
     public void makeTeam(int startRow, boolean team) {
@@ -42,7 +41,7 @@ public class StrategoGameState {
                         j++;
                         k = 0;
                     }
-                    GamePiece piece = new GamePiece(l, team, team, false);
+                    GamePiece piece = new GamePiece(numOfPiecesIndex, team, team, false);
                     boardSquares[j][k] = new BoardSquare(true, piece, j, k);
                     k++;
                 }
