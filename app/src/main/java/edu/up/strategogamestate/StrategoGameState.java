@@ -74,7 +74,6 @@ public class StrategoGameState {
     /**
      *method for moving the piece on a given board square to another square
      * TODO: make sure turn indexing/player vs computer turns make sense
-     * TODO: need to also somehow check that piece on square you are selecting is you own (can't move opponent's pieces)
      * @param square
      * @param newX
      * @param newY
@@ -85,7 +84,8 @@ public class StrategoGameState {
         GamePiece piece = square.getPiece();
 
         //check if it's the player's turn (if not, then move is illegal), or if new square is out of range
-        if(!canMove(playerIndex) || !squareOnBoard(newX, newY)){
+        //also check if piece's team is the same as your team
+        if(!canMove(playerIndex) || !squareOnBoard(newX, newY) || piece.getTeam() != playerIndex){
             return false;
         }
 
@@ -96,9 +96,10 @@ public class StrategoGameState {
             }
         } else if(piece.getRank() == 11 || piece.getRank() == 0){ //immobile pieces (cannot move)
             return false;
-        }else{ //all other pieces have normal movement range (check if square is in range)
+        }else{ //all other pieces have normal movement range (check if square is in range, and is moving at all)
             if(newX > square.getxPos() + 1 || newX < square.getxPos() - 1 ||
-               newY > square.getyPos() + 1 || newY < square.getyPos() - 1 ||){
+               newY > square.getyPos() + 1 || newY < square.getyPos() - 1 ||
+               (square.getxPos() == newX && square.getyPos() == newY)){
                 return false;
             }
         }
@@ -185,7 +186,7 @@ public class StrategoGameState {
         }
     }
 
-    /**
+    /** TODO: for loops to finish checking for valid movement (checking if spaces between tiles are occupied)
      * helper method to determine if selected square is a valid move for a scout piece
      * assumes that it is able to move at all (turn is correct)
      * assumes that new square is in range of board
@@ -195,9 +196,15 @@ public class StrategoGameState {
      * @return true if movement is valid, false if not
      */
     public boolean scoutMove(BoardSquare square, int newX, int newY){
-        //check if given square shares only one of x or y value (trying to check if in straight line)
+        if(square.getxPos() != newX && square.getyPos() != newY){ //checking if square is not in straight line from init
+            return false;
+        }else if(square.getxPos() == newX && square.getyPos() == newY){ //checking if square is exactly the same as init
+            return false;
+        }else if(square.getxPos() == newX){ //up/down movement
 
-        //check if there are any occupied spaces in between selected square and current square
+        }else if(square.getyPos() == newY){ //left/right movement
+
+        }
     }
 
     /**
