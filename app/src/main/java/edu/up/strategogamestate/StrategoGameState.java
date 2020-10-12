@@ -247,7 +247,7 @@ public class StrategoGameState {
         }
     }
 
-    /** TODO: for loops to finish checking for valid movement (checking if spaces between tiles are occupied)
+    /**
      * helper method to determine if selected square is a valid move for a scout piece
      * assumes that it is able to move at all (turn is correct)
      * assumes that new square is in range of board
@@ -262,10 +262,47 @@ public class StrategoGameState {
         }else if(square.getxPos() == newX && square.getyPos() == newY){ //checking if square is exactly the same as init
             return false;
         }else if(square.getxPos() == newX){ //up/down movement
+            //first determine if y value of init square or new square is bigger (take difference)
+            //use this to determine if step should be +1 or -1 in y direction (might have this flipped around)
+            int diff = square.getyPos() - newY;
+            int step;
+            if(diff > 0){ //means init square is lower on board than new square (moving up)
+                step = -1;
+            }else if(diff < 0){ //means init square is higher on board than new square (moving down)
+                step = 1;
+            }else{ //new square cannot be the same as old square
+                return false;
+            }
 
-        }else if(square.getyPos() == newY){ //left/right movement
+            //use diff for for loop, for each square in the range (NOT inclusive of new square), check if occupied
+            //if a square is occupied, then return false, else keep going
+            for(int i = square.getyPos(); i < newY; i += step){
+                if(getBoardSquares()[newX][i].getOccupied() == true){
+                    return false;
+                }
+            }
+        }else if(square.getyPos() == newY){ //left/right movement (same as up/down with x and y swapped)
+            int diff = square.getxPos() - newX;
+            int step;
+            if(diff > 0){
+                step = -1;
+            }else if(diff < 0){
+                step = 1;
+            }else{ //new square cannot be the same as old square
+                return false;
+            }
 
+            //use diff for for loop, for each square in the range (NOT inclusive of new square), check if occupied
+            //if a square is occupied, then return false, else keep going
+            for(int i = square.getxPos(); i < newX; i += step){
+                if(getBoardSquares()[i][newY].getOccupied() == true){
+                    return false;
+                }
+            }
         }
+
+        //should only hit here if new square is a valid movement
+        return true;
     }
 
     /**
