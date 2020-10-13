@@ -1,5 +1,9 @@
 package edu.up.strategogamestate;
 
+import android.util.Log;
+
+import androidx.annotation.NonNull;
+
 public class StrategoGameState {
     //Stratego only has two phases: setup and main gameplay
     //false if setup, true if main gameplay
@@ -8,7 +12,7 @@ public class StrategoGameState {
     private int[] playerGY = new int[11];
     private int[] oppGY = new int[11];
 
-    private BoardSquare[][] boardSquares;
+    private BoardSquare[][] boardSquares = new BoardSquare[10][10];
 
     private final int BOARD_SIZE = 10;
     public static final boolean BLUE = true;
@@ -149,6 +153,36 @@ public class StrategoGameState {
         }else{
             return false;
         }
+    }
+
+    /*
+    *Print information about the current game state
+    * for testing part #d
+    *
+    * TODO implement method to return all information on MainActivity TextView for cp
+    *
+    * print mock game board, players turn and both graveyards
+     */
+    @Override
+    public String toString() {
+        String gameInfo = "";
+
+        gameInfo.concat("Players turn: " + playerTurn + "\n");
+        gameInfo.concat("Graveyards:\t0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11\n");
+
+        /*
+        //print opponents graveyard
+        gameInfo.concat("Red:");
+        for(int i = 0; i <= oppGY.length-1; i++)
+            gameInfo.concat("" + oppGY[i]);
+        //print player graveyard
+        gameInfo.concat("Blue:");
+        for(int j = 0; j <= oppGY.length-1; j++)
+            gameInfo.concat("" + playerGY[j]);
+        */
+
+        Log.i("testing concatted string", gameInfo);
+        return gameInfo;
     }
 
     //getters and setters
