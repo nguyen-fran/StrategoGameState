@@ -131,12 +131,11 @@ public class StrategoGameState {
                 boardSquares[j][k] = new BoardSquare(orig.boardSquares[j][k]);
             }
         }
-
     }
 
     /**
      *method for moving the piece on a given board square to another square
-     * TODO: make sure turn indexing/player vs computer turns make sense
+     * TODO: make sure turn indexing/player vs computer turns make sense, use less if statements
      * @param square
      * @param newX
      * @param newY
@@ -171,11 +170,13 @@ public class StrategoGameState {
         //if new coords are occupied by another piece (not null or player's), then attack
         if(boardSquares[newX][newY].getOccupied() == true &&
            (boardSquares[newX][newY].getPiece() == null ||
-           boardSquares[newX][newY].getPiece().getTeam() != playerIndex)){
+           boardSquares[newX][newY].getPiece().getTeam() == playerIndex)){
             //moving into occupied square that you cannot attack is an illegal move
             return false;
         }else if(boardSquares[newX][newY].getOccupied() == true){
-            attack(square.getPiece(), boardSquares[newX][newY].getPiece(), playerIndex);
+            if(attack(square.getPiece(), boardSquares[newX][newY].getPiece(), playerIndex) == false){
+                return false;
+            }
         }
 
         //check initial square/new square pieces for capture
@@ -233,6 +234,10 @@ public class StrategoGameState {
             }
 
         }
+
+        //on attacking or being attacked, pieces will become visible to opponent
+        piece1.setVisible(true);
+        piece2.setVisible(true);
         return true;
     }
 
