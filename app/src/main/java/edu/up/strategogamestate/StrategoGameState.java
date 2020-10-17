@@ -6,7 +6,7 @@ public class StrategoGameState {
     //Stratego only has two phases: setup and main gameplay
     private boolean gamePhase;  //false if on setup, true if on main gameplay
     private boolean playerTurn; //true if human's turn, false if com's turn
-    //these arrays holds the number of deaths of each type of piece
+    //these arrays holds the number of deaths of each type of piece in order of: 1, 2, ..., 9, 10, bomb
     private int[] playerGY = new int[11];
     private int[] oppGY = new int[11];
 
@@ -15,20 +15,20 @@ public class StrategoGameState {
     private static final int BOARD_SIZE = 10;
     public static final boolean BLUE = true;
     public static final boolean RED = false;
-    public static final boolean HUMANTURN = true;
-    public static final boolean COMPTURN = false;
+    public static final boolean HUMAN_TURN = true;
+    public static final boolean COMP_TURN = false;
 
     //the amount of each type of piece each player has in order of: flag, 1, 2, ..., 9, 10, bomb
-    private static final int[] numOfPieces = {1, 1, 8, 5, 4, 4, 4, 3, 2, 1, 1, 6};
+    private static final int[] NUM_OF_PIECES = {1, 1, 8, 5, 4, 4, 4, 3, 2, 1, 1, 6};
     //coordinates for the Lake Squares which can't be occupied
-    private static final int[][] lakeSquares = {{4, 2}, {4, 3}, {5, 2}, {5, 3}, {4, 6}, {4, 7}, {5, 6}, {5, 7}};
+    private static final int[][] LAKE_SQUARES = {{4, 2}, {4, 3}, {5, 2}, {5, 3}, {4, 6}, {4, 7}, {5, 6}, {5, 7}};
 
     /**
      * constructor
      */
     public StrategoGameState() {
         gamePhase = false;
-        playerTurn = HUMANTURN;  //should it be like this to start?
+        playerTurn = HUMAN_TURN;  //should it be like this to start?
         //there are zero deaths at the start of a game
         for (int i = 0; i < playerGY.length; i++) {
             playerGY[i] = 0;
@@ -45,7 +45,7 @@ public class StrategoGameState {
             }
         }
         //updating the Lake Squares which can't be occupied by any pieces
-        for (int[] lakeSquare : lakeSquares) {
+        for (int[] lakeSquare : LAKE_SQUARES) {
             boardSquares[lakeSquare[0]][lakeSquare[1]].setOccupied(true);
         }
 
@@ -63,9 +63,11 @@ public class StrategoGameState {
      */
     private void makeTeam(int startRow, boolean team) {
         int numOfPiecesIndex = 0;   //this will also signify the rank of the GamePiece being made
+        //outer 2 for loops used to provide coordinates of the board square being initialized
         for (int i = startRow; i < startRow + 4; i++) {
             for (int j = 0; j < BOARD_SIZE; j++) {
-                for (int k = 0; k < numOfPieces[numOfPiecesIndex]; k++) {
+                //innermost for loop used to initialize correct number of pieces of certain rank
+                for (int k = 0; k < NUM_OF_PIECES[numOfPiecesIndex]; k++) {
                     //check if at end of row, if so move to next row and start on col 0
                     if (j >= BOARD_SIZE) {
                         i++;
@@ -82,7 +84,7 @@ public class StrategoGameState {
 
     /**
      * Helper method for constructor.
-     * Randomizes the region of boardSquares within ranges given by param
+     * Randomizes the pieces in the region of boardSquares within ranges given by params
      * Intended use is the randomize one team's side of the board before the start of a game
      *
      * @param startRow
@@ -97,15 +99,15 @@ public class StrategoGameState {
 
         Random rand = new Random();
         int randXPos, randYPos;
-        BoardSquare temp;
+        GamePiece temp;
         for (int i = startRow; i < endRow; i++) {
             for (int j = startCol; j < endCol; j++) {
                 randXPos = rand.nextInt(endRow - startRow) + startRow;
                 randYPos = rand.nextInt(endCol - startCol) + startCol;
 
-                temp = boardSquares[randXPos][randYPos];
-                boardSquares[randXPos][randYPos] = boardSquares[i][j];
-                boardSquares[i][j] = temp;
+                temp = boardSquares[randXPos][randYPos].getPiece();
+                boardSquares[randXPos][randYPos].setPiece(boardSquares[i][j].getPiece());
+                boardSquares[i][j].setPiece(temp);
             }
         }
     }
@@ -215,14 +217,14 @@ public class StrategoGameState {
         }
 
         //updating graveyard(s)
-        if(playerIndex == HUMANTURN){ //human attacking computer
+        if(playerIndex == HUMAN_TURN){ //human attacking computer
             if(piece1.getCaptured() == true){ //updating player graveyard
                 setPlayerGYIdx(piece1.getRank() - 1, getPlayerGY()[piece1.getRank() - 1] + 1);
             }
             if(piece2.getCaptured() == true){ //updating opponent graveyard
                 setOppGYIdx(piece2.getRank() - 1, getOppGY()[piece2.getRank() - 1] + 1);
             }
-        }else if(playerIndex == COMPTURN){ //computer attacking human
+        }else if(playerIndex == COMP_TURN){ //computer attacking human
             if(piece1.getCaptured() == true){ //updating opponent graveyard
                 setOppGYIdx(piece1.getRank() - 1, getOppGY()[piece1.getRank() - 1] + 1);
             }
@@ -240,11 +242,7 @@ public class StrategoGameState {
      * @return true if they can move, false if they can't
      */
     public boolean canMove(boolean playerId){
-        if(playerId == getPlayerTurn()){
-            return true;
-        }else{
-            return false;
-        }
+        return (playerId == getPlayerTurn());
     }
 
     /**
@@ -312,14 +310,12 @@ public class StrategoGameState {
      * @return true if square is within range of the board, false if not
      */
     public boolean squareOnBoard(int x, int y){
-        if(x > BOARD_SIZE || y > BOARD_SIZE || x < 0 || y < 0){
-            return false;
-        }else{
-            return true;
-        }
+        return (x > BOARD_SIZE || y > BOARD_SIZE || x < 0 || y < 0);
     }
 
-    //getters and setters
+    /*
+    getters and setters
+    */
 
     //getters
     public boolean getGamePhase(){

@@ -2,6 +2,7 @@ package edu.up.strategogamestate;
 
 /**
  * tells state of individual board square, tells whether it is occupied, what piece is on it, coordinates, etc
+ * NOTE: the Lake Squares and are represented as occupied being true but piece is null
  */
 public class BoardSquare {
     private boolean occupied;
