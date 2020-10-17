@@ -153,9 +153,7 @@ public class StrategoGameState {
 
         //check if coordinates you want to move to are valid for piece (special exception for scout range, and immobile pieces)
         if(piece.getRank() == 2){ //checking validity for scout (special range)
-            if(scoutMove(square, newX, newY) == false){
-                return false;
-            }
+            return (scoutMove(square, newX, newY));
         } else if(piece.getRank() == 11 || piece.getRank() == 0){ //immobile pieces (cannot move)
             return false;
         }else{ //all other pieces have normal movement range (check if square is in range, and is moving at all)
@@ -174,19 +172,21 @@ public class StrategoGameState {
             //moving into occupied square that you cannot attack is an illegal move
             return false;
         }else if(boardSquares[newX][newY].getOccupied() == true){
-            if(attack(square.getPiece(), boardSquares[newX][newY].getPiece(), playerIndex) == false){
-                return false;
+            attack(square.getPiece(), boardSquares[newX][newY].getPiece(), playerIndex);    //note: if you do the return statement now then you can't move the piece later
+            //just in case both pieces are captured
+            if (boardSquares[newX][newY].getPiece().getCaptured()) {
+                boardSquares[newX][newY].setPiece(null);
+                boardSquares[newX][newY].setOccupied(false);
             }
         }
 
         //check initial square/new square pieces for capture
         //update init/new square pieces appropriately
-        if(square.getPiece().getCaptured()){
-            square.setPiece(null);
-        }else{
+        if (!square.getPiece().getCaptured()) {
             boardSquares[newX][newY].setPiece(square.getPiece());
-            square.setPiece(null);
         }
+        square.setPiece(null);
+        square.setOccupied(false);
 
         return true;
     }
@@ -316,6 +316,39 @@ public class StrategoGameState {
      */
     public boolean squareOnBoard(int x, int y){
         return (x > BOARD_SIZE || y > BOARD_SIZE || x < 0 || y < 0);
+    }
+
+    /**
+     * Swaps pieces that are on the same team, this is for the setup phase of the game
+     *
+     * @param square1
+     * @param square2
+     * @param player    to know if human player or comp player
+     * @return
+     */
+    public boolean setup(BoardSquare square1, BoardSquare square2, boolean player) {
+        if (square1.getPiece() == null || square1.getPiece() == null) {
+            return false;
+        }
+        if (square1.getPiece().getTeam() != player || square2.getPiece().getTeam() != player) {
+            return false;
+        }
+
+        GamePiece temp = square1.getPiece();
+        square1.setPiece(square2.getPiece());
+        square2.setPiece(temp);
+        return true;
+    }
+
+    /**
+     * Resets the game
+     * 
+     * @param currGameState
+     * @return
+     */
+    public boolean reset(StrategoGameState currGameState) {
+        currGameState = new StrategoGameState();
+        return true;
     }
 
     /*
