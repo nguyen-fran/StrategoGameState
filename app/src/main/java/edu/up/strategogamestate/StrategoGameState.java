@@ -11,6 +11,7 @@ public class StrategoGameState {
     private int[] oppGY = new int[11];
 
     private BoardSquare[][] boardSquares;
+    private StrategoGameState prevGameState;
 
     private static final int BOARD_SIZE = 10;
     public static final boolean BLUE = true;
@@ -52,6 +53,8 @@ public class StrategoGameState {
         //the game starts with a randomized board
         randomize(0, 4, 0, 10);
         randomize(6, 10, 0, 10);
+
+        prevGameState = new StrategoGameState();
     }
 
     /**
@@ -143,6 +146,8 @@ public class StrategoGameState {
      * @return
      */
     public boolean move(BoardSquare square, int newX, int newY, boolean playerIndex){
+        prevGameState = new StrategoGameState(this);
+
         GamePiece piece = square.getPiece();
 
         //check if it's the player's turn (if not, then move is illegal), or if new square is out of range
@@ -319,6 +324,21 @@ public class StrategoGameState {
     }
 
     /**
+     * Sets gamestate to what it was before the previous action
+     *
+     * @param currGameState
+     * @return
+     */
+    public boolean undo (StrategoGameState currGameState) {
+        if (currGameState == null || prevGameState == null) {
+            return false;
+        }
+
+        currGameState = prevGameState;
+        return true;
+    }
+
+    /**
      * Swaps pieces that are on the same team, this is for the setup phase of the game
      *
      * @param square1
@@ -327,9 +347,11 @@ public class StrategoGameState {
      * @return
      */
     public boolean setup(BoardSquare square1, BoardSquare square2, boolean player) {
+        //check if there are pieces of the squares to swap
         if (square1.getPiece() == null || square1.getPiece() == null) {
             return false;
         }
+        //check if the pieces belong to the player doing the swap
         if (square1.getPiece().getTeam() != player || square2.getPiece().getTeam() != player) {
             return false;
         }
@@ -347,8 +369,47 @@ public class StrategoGameState {
      * @return
      */
     public boolean reset(StrategoGameState currGameState) {
+        if (currGameState == null) {
+            return false;
+        }
         currGameState = new StrategoGameState();
         return true;
+    }
+
+    @Override
+    public String toString() {
+        String str = "";
+
+        if (gamePhase) {
+            str += "Main gameplay phase\t\t";
+        } else {
+            str += "Setup phase\t\t";
+        }
+        if (playerTurn) {
+            str += "Player's turn\n\n";
+        } else {
+            str += "Opponent's turn\n\n";
+        }
+
+        //adding graveyards to the string
+        for (int i = 0; i < playerGY.length; i++) {
+            str += "Player's Graveyard: [" + playerGY[i] + "] ";
+        }
+        str += "\n";
+        for (int i = 0; i < oppGY.length; i++) {
+            str += "Opponent's Graveyard: [" + oppGY[i] + "] ";
+        }
+        str += "\n\n";
+
+        //adding whole board to the string
+        for(int i = 0; i < BOARD_SIZE; i++) {
+            for (int j = 0; j < BOARD_SIZE; j++) {
+                str += "[" + boardSquares[i][j].getPiece().getTeam() + " " + boardSquares[i][j].getPiece().getRank() + "]  ";
+            }
+            str += "\n";
+        }
+
+        return str;
     }
 
     /*
@@ -370,6 +431,9 @@ public class StrategoGameState {
     }
     public BoardSquare[][] getBoardSquares() {
         return boardSquares;
+    }
+    public StrategoGameState getPrevGameState() {
+        return prevGameState;
     }
 
     //setters
@@ -397,5 +461,8 @@ public class StrategoGameState {
     }
     public void setBoardSquares(BoardSquare[][] boardSquares) {
         this.boardSquares = boardSquares;
+    }
+    public void setPrevGameState(StrategoGameState prevGameState) {
+        this.prevGameState = new StrategoGameState(prevGameState);
     }
 }
