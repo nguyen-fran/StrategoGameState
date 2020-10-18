@@ -14,7 +14,6 @@ public class StrategoGameState {
     private int[] playerGY = new int[11];
     private int[] oppGY = new int[11];
 
-
     private StrategoGameState prevGameState;
     private BoardSquare[][] boardSquares = new BoardSquare[10][10];
 
@@ -59,6 +58,7 @@ public class StrategoGameState {
         randomize(0, 4, 0, 10);
         randomize(6, 10, 0, 10);
 
+        //this will be used for the undo action later in StrategoLocalGame, but for this checkpoint it is just null to avoid infinite recursion
         prevGameState = null;
     }
 
@@ -392,9 +392,9 @@ public class StrategoGameState {
         String str = "";
 
         if (gamePhase) {
-            str += "Main gameplay phase\t\t";
+            str += "Main gameplay phase\n";
         } else {
-            str += "Setup phase\t\t";
+            str += "Setup phase\n";
         }
         if (playerTurn) {
             str += "Player's turn\n\n";
@@ -403,19 +403,28 @@ public class StrategoGameState {
         }
 
         //adding graveyards to the string
+        str += "Player's Graveyard: ";
         for (int i = 0; i < playerGY.length; i++) {
-            str += "Player's Graveyard: [" + playerGY[i] + "] ";
+            str += "[" + playerGY[i] + "] ";
         }
-        str += "\n";
+        str += "\nOpponents's Graveyard: ";
         for (int i = 0; i < oppGY.length; i++) {
-            str += "Opponent's Graveyard: [" + oppGY[i] + "] ";
+            str += "[" + oppGY[i] + "] ";
         }
         str += "\n\n";
 
         //adding whole board to the string
         for(int i = 0; i < BOARD_SIZE; i++) {
             for (int j = 0; j < BOARD_SIZE; j++) {
-                str += "[" + boardSquares[i][j].getPiece().getTeam() + " " + boardSquares[i][j].getPiece().getRank() + "]  ";
+                if (boardSquares[i][j].getPiece() != null) {
+                    if (boardSquares[i][j].getPiece().getTeam() == RED) {
+                        str += "[Red " + boardSquares[i][j].getPiece().getRank() + "]\t";
+                    } else {
+                        str += "[Blue " + boardSquares[i][j].getPiece().getRank() + "]\t";
+                    }
+                } else {
+                    str += "[    ] \t\t\t";
+                }
             }
             str += "\n";
         }
