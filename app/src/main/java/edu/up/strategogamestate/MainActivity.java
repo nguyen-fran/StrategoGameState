@@ -37,7 +37,30 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
      */
     @Override
     public void onClick(View v) {
-        gameInfoLog.setText((CharSequence) gameState.toString());
+        //clear out any previous text from data space
+        gameInfoLog.setText("");
+
+        StrategoGameState firstInstance = new StrategoGameState();
+
+        //creating deep copy of firstInstance
+        StrategoGameState secondInstance = new StrategoGameState(firstInstance);
+
+        //call each method of StrategoGameState
+
+        StrategoGameState thirdInstance = new StrategoGameState();
+        StrategoGameState fourthInstance = new StrategoGameState(thirdInstance);
+
+        //TODO make sure new instances of the game state have the same board layout
+
+        String tempSecondString = secondInstance.toString();
+        String tempFourthString = fourthInstance.toString();
+
+        if(tempSecondString.equals(tempFourthString)){
+            gameInfoLog.setText("The seperate deep copies match!");
+        }
+
+        //gameInfoLog.setText(gameInfoLog.getText().toString().concat(tempSecondString + "\n" + tempFourthString));
+        gameInfoLog.setText(gameState.toString());
     }
 
 }
