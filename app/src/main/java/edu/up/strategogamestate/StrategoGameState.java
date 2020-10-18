@@ -83,7 +83,12 @@ public class StrategoGameState {
                     }
                     GamePiece piece = new GamePiece(numOfPiecesIndex, team, team, false);
                     boardSquares[i][j] = new BoardSquare(true, piece, i, j);
-                    j++;
+
+                    //only increment j if there is another piece to make
+                    //this avoids j being incremented twice: once on the last piece and again when re-entering the middle for loop
+                    if (k < NUM_OF_PIECES[numOfPiecesIndex] - 1) {
+                        j++;
+                    }
                 }
                 numOfPiecesIndex++;
             }
