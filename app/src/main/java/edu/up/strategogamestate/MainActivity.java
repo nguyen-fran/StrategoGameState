@@ -26,16 +26,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         gameInfoLog = findViewById(R.id.gameInfoLog);
 
-        /**
-         External Citation
-         Date: 10 October 2020
-         Problem: Needed to stop EditText from recieving user input
-         Resource:
-         https://stackoverflow.com/questions/9470171/edittext-non-editable
-         Solution: I used the example code from this post.
-         */
-        gameInfoLog.setKeyListener(null);
-
 
     }
 
@@ -47,7 +37,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
      */
     @Override
     public void onClick(View v) {
-        //CharSequence update = gameState.toString();
         gameInfoLog.setText((CharSequence) gameState.toString());
     }
 

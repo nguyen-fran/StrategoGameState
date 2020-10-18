@@ -59,7 +59,7 @@ public class StrategoGameState {
         randomize(0, 4, 0, 10);
         randomize(6, 10, 0, 10);
 
-        prevGameState = new StrategoGameState();
+        prevGameState = null;
     }
 
     /**
