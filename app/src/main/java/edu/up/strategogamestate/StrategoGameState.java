@@ -6,6 +6,9 @@ import android.util.Log;
 
 import androidx.annotation.NonNull;
 
+/**
+ * A class that contains the data for a Stratego game and methods to do actions in Stratego
+ */
 public class StrategoGameState {
     //Stratego only has two phases: setup and main gameplay
     private boolean gamePhase;  //false if on setup, true if on main gameplay
@@ -423,20 +426,23 @@ public class StrategoGameState {
                 if (boardSquares[i][j].getPiece() != null) {
                     //check which team the piece is on
                     if (boardSquares[i][j].getPiece().getTeam() == RED) {
-                    if (lakeChecker(i, j)){
-                        str += "[LAKE]\t";
-                    } else if (boardSquares[i][j].getPiece().getTeam() == RED) {
                         str += "[Red " + boardSquares[i][j].getPiece().getRank() + "]\t";
                     } else {
                         str += "[Blue " + boardSquares[i][j].getPiece().getRank() + "]\t";
                     }
                 } else {
-                    str += "[    ] \t\t\t";
+                    //check if it's a lake square
+                    if (boardSquares[i][j].getOccupied()) {
+                        str += "[LAKE]\t\t";
+                    } else {
+                        str += "[     ] \t\t\t";
+                    }
                 }
             }
             str += "\n";
         }
 
+        str += "\n----------------\n\n";
         return str;
     }
 
