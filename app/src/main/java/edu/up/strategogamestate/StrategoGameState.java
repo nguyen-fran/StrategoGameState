@@ -100,10 +100,10 @@ public class StrategoGameState {
      * Randomizes the pieces in the region of boardSquares within ranges given by params
      * Intended use is the randomize one team's side of the board before the start of a game
      *
-     * @param startRow
-     * @param endRow
-     * @param startCol
-     * @param endCol
+     * @param startRow starting row boundary for randomization
+     * @param endRow ending row boundary
+     * @param startCol starting column boundary
+     * @param endCol ending column boundary
      */
     private void randomize(int startRow, int endRow, int startCol, int endCol) {
         if (startRow < 0 || endRow > BOARD_SIZE || startCol < 0 || endCol > BOARD_SIZE) {
@@ -149,15 +149,18 @@ public class StrategoGameState {
 
     /**
      *method for moving the piece on a given board square to another square
-     * TODO: make sure turn indexing/player vs computer turns make sense, use less if statements
-     * @param square
-     * @param newX
-     * @param newY
+     * @param square square being selected by the player in order to move the piece on it
+     * @param newX x coordinate that player is trying to move to
+     * @param newY y coordinate that player is trying to move to
      * @param playerIndex who is trying to make the move
-     * @return
+     * @return true if move is legal, false if not
      */
     public boolean move(BoardSquare square, int newX, int newY, boolean playerIndex){
         prevGameState = new StrategoGameState(this);
+
+        if(square.getPiece() == null){
+            return false;
+        }
 
         GamePiece piece = square.getPiece();
 
@@ -337,8 +340,8 @@ public class StrategoGameState {
     /**
      * Sets gamestate to what it was before the previous action
      *
-     * @param currGameState
-     * @return
+     * @param currGameState the current state of the game
+     * @return true if move was successfully undone, false otherwise
      */
     public boolean undo (StrategoGameState currGameState) {
         if (currGameState == null || prevGameState == null) {
@@ -352,14 +355,14 @@ public class StrategoGameState {
     /**
      * Swaps pieces that are on the same team, this is for the setup phase of the game
      *
-     * @param square1
-     * @param square2
+     * @param square1 first square being selected for swap
+     * @param square2 second square being selected for swap
      * @param player    to know if human player or comp player
-     * @return
+     * @return true if swap was successful, false otherwise
      */
     public boolean setup(BoardSquare square1, BoardSquare square2, boolean player) {
         //check if there are pieces of the squares to swap
-        if (square1.getPiece() == null || square1.getPiece() == null) {
+        if (square1.getPiece() == null || square2.getPiece() == null) {
             return false;
         }
         //check if the pieces belong to the player doing the swap
@@ -376,8 +379,8 @@ public class StrategoGameState {
     /**
      * Resets the game
      *
-     * @param currGameState
-     * @return
+     * @param currGameState reference to current state of the game
+     * @return true if game state was successfully reset, false otherwise
      */
     public boolean reset(StrategoGameState currGameState) {
         if (currGameState == null) {
@@ -417,7 +420,9 @@ public class StrategoGameState {
         for(int i = 0; i < BOARD_SIZE; i++) {
             for (int j = 0; j < BOARD_SIZE; j++) {
                 if (boardSquares[i][j].getPiece() != null) {
-                    if (boardSquares[i][j].getPiece().getTeam() == RED) {
+                    if (lakeChecker(i, j)){
+                        str += "[LAKE]\t";
+                    } else if (boardSquares[i][j].getPiece().getTeam() == RED) {
                         str += "[Red " + boardSquares[i][j].getPiece().getRank() + "]\t";
                     } else {
                         str += "[Blue " + boardSquares[i][j].getPiece().getRank() + "]\t";
@@ -430,6 +435,23 @@ public class StrategoGameState {
         }
 
         return str;
+    }
+
+    /**
+     * helper method for toString, to check if a given coordinate is a lake square
+     * @param x x coord being checked
+     * @param y y coord being checked
+     * @return true if given coordinate is a lake, false if not
+     */
+    public boolean lakeChecker(int x, int y){
+        int[] arr = {x,y};
+        for(int[] lakeSquare : LAKE_SQUARES){
+            if (arr == lakeSquare) {
+                return true;
+            }
+        }
+
+        return false;
     }
 
     /*
