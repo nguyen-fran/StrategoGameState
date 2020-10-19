@@ -11,6 +11,13 @@ public class BoardSquare {
     private int xPos;
     private int yPos;
 
+    /**
+     * constructor for BoardSquare, sets instance variables to given values
+     * @param occupied whether the square should be occupied or not
+     * @param piece game piece on the square (null if none exists)
+     * @param xPos x coordinate of the square on the board
+     * @param yPos y coordinate of the square on the board
+     */
     public BoardSquare(boolean occupied, GamePiece piece, int xPos, int yPos){
         this.occupied = occupied;
         this.highlight = false;
@@ -19,6 +26,10 @@ public class BoardSquare {
         this.yPos = yPos;
     }
 
+    /**
+     * copy constructor for BoardSquare
+     * @param orig original square being copied
+     */
     public BoardSquare(BoardSquare orig) {
         this.occupied = orig.occupied;
         this.highlight = orig.highlight;

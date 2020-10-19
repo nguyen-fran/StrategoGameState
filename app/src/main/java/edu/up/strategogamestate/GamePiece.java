@@ -1,7 +1,7 @@
 package edu.up.strategogamestate;
 
 /**
- * describes an individual game piece/unit (rank, team, etc)
+ * data holding class that describes an individual game piece/unit (rank, team, etc)
  */
 public class GamePiece {
     private int rank; //standard nums for mobile pieces, bomb is 11, flag is 0
@@ -9,14 +9,25 @@ public class GamePiece {
     private boolean visible;
     private boolean captured;
 
-
-    GamePiece(){ //nonsense default values, all need to be changed later
+    /**
+     * default constructor for GamePiece
+     * default values that need to be changed to proper ones later
+     */
+    GamePiece(){
         rank = -1;
         team  = true;
         visible = false;
         captured = false;
     }
 
+    /**
+     * constructor for GamePiece
+     * creates new game piece and sets values to the ones given
+     * @param rank piece's numerical rank (0-11)
+     * @param team piece's team (RED or BLUE)
+     * @param visible whether the piece is visible or not
+     * @param captured whether the piece has been captured or not
+     */
     GamePiece(int rank, boolean team, boolean visible, boolean captured){
         this.rank = rank;
         this.team = team;
