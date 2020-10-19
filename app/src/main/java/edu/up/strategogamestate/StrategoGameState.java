@@ -10,7 +10,7 @@ public class StrategoGameState {
     //Stratego only has two phases: setup and main gameplay
     private boolean gamePhase;  //false if on setup, true if on main gameplay
     private boolean playerTurn; //true if human's turn, false if com's turn
-    //these arrays holds the number of deaths of each type of piece in order of: 1, 2, ..., 9, 10, bomb
+    //these arrays holds the number of deaths of each type of piece (no flag) in order of: 1, 2, ..., 9, 10, bomb
     private int[] playerGY = new int[11];
     private int[] oppGY = new int[11];
 
@@ -407,7 +407,7 @@ public class StrategoGameState {
         for (int i = 0; i < playerGY.length; i++) {
             str += "[" + playerGY[i] + "] ";
         }
-        str += "\nOpponents's Graveyard: ";
+        str += "\nOpponent's Graveyard: ";
         for (int i = 0; i < oppGY.length; i++) {
             str += "[" + oppGY[i] + "] ";
         }
@@ -416,7 +416,9 @@ public class StrategoGameState {
         //adding whole board to the string
         for(int i = 0; i < BOARD_SIZE; i++) {
             for (int j = 0; j < BOARD_SIZE; j++) {
+                //check if there is a GamePiece on the square
                 if (boardSquares[i][j].getPiece() != null) {
+                    //check which team the piece is on
                     if (boardSquares[i][j].getPiece().getTeam() == RED) {
                         str += "[Red " + boardSquares[i][j].getPiece().getRank() + "]\t";
                     } else {
