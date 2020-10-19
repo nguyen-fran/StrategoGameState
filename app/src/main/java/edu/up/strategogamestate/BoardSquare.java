@@ -33,7 +33,11 @@ public class BoardSquare {
     public BoardSquare(BoardSquare orig) {
         this.occupied = orig.occupied;
         this.highlight = orig.highlight;
-        this.piece = new GamePiece(orig.piece);
+        if (orig.piece == null) {
+            this.piece = null;
+        } else {
+            this.piece = new GamePiece(orig.piece);
+        }
         this.xPos = orig.xPos;
         this.yPos = orig.yPos;
     }
