@@ -59,8 +59,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             gameInfoLog.setText("The seperate deep copies match!");
         }
 
-        //gameInfoLog.setText(gameInfoLog.getText().toString().concat(tempSecondString + "\n" + tempFourthString));
+        gameInfoLog.setText(gameInfoLog.getText().toString().concat(tempSecondString + "\n" + tempFourthString));
         gameInfoLog.setText(gameState.toString());
+
     }
 
 }

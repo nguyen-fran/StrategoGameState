@@ -13,7 +13,7 @@ public class GamePiece {
      * default constructor for GamePiece
      * default values that need to be changed to proper ones later
      */
-    GamePiece(){
+    public GamePiece(){
         rank = -1;
         team  = true;
         visible = false;
@@ -28,7 +28,7 @@ public class GamePiece {
      * @param visible whether the piece is visible or not
      * @param captured whether the piece has been captured or not
      */
-    GamePiece(int rank, boolean team, boolean visible, boolean captured){
+   public GamePiece(int rank, boolean team, boolean visible, boolean captured){
         this.rank = rank;
         this.team = team;
         this.visible = visible;
@@ -36,10 +36,10 @@ public class GamePiece {
     }
 
     public GamePiece(GamePiece orig) {
-        this.rank = orig.rank;
-        this.team = orig.team;
-        this.visible = orig.visible;
-        this.captured = orig.captured;
+        this.rank = orig.getRank();
+        this.team = orig.getTeam();
+        this.visible = orig.getVisible();
+        this.captured = orig.getCaptured();
     }
 
     //getters/setters

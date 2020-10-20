@@ -43,9 +43,7 @@ public class StrategoGameState {
             oppGY[i] = 0;
         }
 
-        //making the squares for RED and BLUE team
-        this.makeTeam(0, RED);
-        this.makeTeam(6, BLUE);
+
         //making the BoardSquares that start empty
         for (int j = 4; j < 6; j++) {
             for (int k = 0; k < BOARD_SIZE; k++) {
@@ -57,9 +55,13 @@ public class StrategoGameState {
             boardSquares[lakeSquare[0]][lakeSquare[1]].setOccupied(true);
         }
 
+        //making the squares for RED and BLUE team
+        this.makeTeam(0, RED);
+        this.makeTeam(6, BLUE);
+
         //the game starts with a randomized board
-        randomize(0, 4, 0, 10);
-        randomize(6, 10, 0, 10);
+        //randomize(0, 4, 0, 10);
+        //randomize(6, 10, 0, 10);
 
         //this will be used for the undo action later in StrategoLocalGame, but for this checkpoint it is just null to avoid infinite recursion
         prevGameState = null;
@@ -73,7 +75,9 @@ public class StrategoGameState {
      * @param team      either BLUE or RED.
      */
     private void makeTeam(int startRow, boolean team) {
-        int numOfPiecesIndex = 0;   //this will also signify the rank of the GamePiece being made
+        int numOfPiecesIndex = 0;
+        GamePiece piece;
+        //this will also signify the rank of the GamePiece being made
         //outer 2 for loops used to provide coordinates of the board square being initialized
         for (int i = startRow; i < startRow + 4; i++) {
             for (int j = 0; j < BOARD_SIZE; j++) {
@@ -84,8 +88,8 @@ public class StrategoGameState {
                         i++;
                         j = 0;
                     }
-                    GamePiece piece = new GamePiece(numOfPiecesIndex, team, team, false);
-                    boardSquares[i][j] = new BoardSquare(true, piece, i, j);
+                    //piece = new GamePiece(numOfPiecesIndex, team, team, false);
+                    boardSquares[i][j] = new BoardSquare(true, new GamePiece(numOfPiecesIndex, team, team, false), i, j);
 
                     //only increment j if there is another piece to make
                     //this avoids j being incremented twice: once on the last piece and again when re-entering the middle for loop
@@ -144,7 +148,8 @@ public class StrategoGameState {
 
         for (int j = 0; j < BOARD_SIZE; j++) {
             for (int k = 0; k < BOARD_SIZE; k++) {
-                boardSquares[j][k] = new BoardSquare(orig.boardSquares[j][k]);
+                Log.i("Testing deep copy", "" + orig.getBoardSquares()[j][k]);
+                //this.boardSquares[j][k] = new BoardSquare(orig.getBoardSquares()[j][k]);
             }
         }
 
@@ -257,6 +262,7 @@ public class StrategoGameState {
 
         }
 
+        //TODO piece does not need to be revealed if defender is higher
         //on attacking or being attacked, pieces will become visible to opponent
         piece1.setVisible(true);
         piece2.setVisible(true);
