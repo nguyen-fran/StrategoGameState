@@ -176,7 +176,7 @@ public class StrategoGameState {
 
         //check if it's the player's turn (if not, then move is illegal), or if new square is out of range
         //also check if piece's team is the same as your team
-        if(!canMove(playerIndex) || squareOnBoard(newX, newY) || piece.getTeam() != playerIndex){
+        if(!canMove(playerIndex) || !squareOnBoard(newX, newY) || piece.getTeam() != playerIndex){
             return false;
         }
 
@@ -355,7 +355,7 @@ public class StrategoGameState {
      * @return true if square is within range of the board, false if not
      */
     public boolean squareOnBoard(int x, int y){
-        return (x > BOARD_SIZE || y > BOARD_SIZE || x < 0 || y < 0);
+        return !(x > BOARD_SIZE || y > BOARD_SIZE || x < 0 || y < 0);
     }
 
     /**
