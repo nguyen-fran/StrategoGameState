@@ -2,6 +2,10 @@ package edu.up.strategogamestate;
 
 /**
  * data holding class that describes an individual game piece/unit (rank, team, etc)
+ * @author Gabby Marshak
+ * @author Francisco Nguyen
+ * @author Blake Nygren
+ * @author Jack Volonte
  */
 public class GamePiece {
     private int rank; //standard nums for mobile pieces, bomb is 11, flag is 0

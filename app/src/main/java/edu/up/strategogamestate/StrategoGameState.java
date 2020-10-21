@@ -6,6 +6,10 @@ import android.util.Log;
 
 /**
  * A class that contains the data for a Stratego game and methods to do actions in Stratego
+ * @author Gabby Marshak
+ * @author Francisco Nguyen
+ * @author Blake Nygren
+ * @author Jack Volonte
  */
 public class StrategoGameState {
     //Stratego only has two phases: setup and main gameplay
