@@ -75,12 +75,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         //TODO fix move() to actually move piece (can be tested with below)
         //move spy to square 1 above piece
         //attack with other piece
-
-        //testing invalid move
-        firstInstance.move(firstInstance.getBoardSquares()[8][6], 8, 4, false );
-        gameInfoLog.setText(gameInfoLog.getText().toString().concat(firstInstance.toString()));
-
-        firstInstance.move(firstInstance.getBoardSquares()[6][1], 5, 1, true);
+        firstInstance.move(firstInstance.getBoardSquares()[6][1], 5, 1, StrategoGameState.BLUE);
         gameInfoLog.setText(gameInfoLog.getText().toString().concat(firstInstance.toString()));
 
 
