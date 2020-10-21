@@ -69,16 +69,26 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         //check reset
         if(firstInstance.reset(firstInstance)){
-            gameInfoLog.setText(gameInfoLog.getText().toString().concat("\n\n# The reset was successful\n\n"));
+            gameInfoLog.setText(gameInfoLog.getText().toString().concat("\n\n# The reset was successful\n\n# Now moving spy\n\n"));
         }
 
-        //TODO fix move() to actually move piece (can be tested with below)
-        //move spy to square 1 above piece
-        //attack with other piece
+        //moving spy to attack red 8
         firstInstance.move(firstInstance.getBoardSquares()[6][1], 5, 1, StrategoGameState.BLUE);
         gameInfoLog.setText(gameInfoLog.getText().toString().concat(firstInstance.toString()));
 
+        firstInstance.move(firstInstance.getBoardSquares()[5][1], 4, 1, StrategoGameState.BLUE);
+        gameInfoLog.setText(gameInfoLog.getText().toString().concat(firstInstance.toString()));
 
+        firstInstance.move(firstInstance.getBoardSquares()[4][1], 3, 1, StrategoGameState.BLUE);
+        gameInfoLog.setText(gameInfoLog.getText().toString().concat(firstInstance.toString()));
+
+        gameInfoLog.setText(gameInfoLog.getText().toString() + "\n\n# Scout successfully attacked the red 8 and failed\n\n# Now moving blue 2 three spaces to attack red 11\n\n");
+
+        //moving scout to attack red 11 3 spaces ahead
+        firstInstance.move(firstInstance.getBoardSquares()[6][4], 3, 4, StrategoGameState.BLUE);
+        gameInfoLog.setText(gameInfoLog.getText().toString().concat(firstInstance.toString()));
+
+        gameInfoLog.setText(gameInfoLog.getText().toString() + "\n# Spy successfully attacked the red 11 and failed\n\n");
     }
 
 }
