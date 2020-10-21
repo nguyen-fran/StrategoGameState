@@ -4,8 +4,6 @@ import java.util.Random;
 
 import android.util.Log;
 
-import androidx.annotation.NonNull;
-
 /**
  * A class that contains the data for a Stratego game and methods to do actions in Stratego
  */
@@ -157,12 +155,12 @@ public class StrategoGameState {
     /**
      *method for moving the piece on a given board square to another square
      * @param square square being selected by the player in order to move the piece on it
-     * @param newX x coordinate that player is trying to move to
-     * @param newY y coordinate that player is trying to move to
+     * @param newRow row that player is trying to move to
+     * @param newCol column that player is trying to move to
      * @param playerIndex who is trying to make the move
      * @return true if move is legal, false if not
      */
-    public boolean move(BoardSquare square, int newX, int newY, boolean playerIndex){
+    public boolean move(BoardSquare square, int newRow, int newCol, boolean playerIndex){
         prevGameState = new StrategoGameState(this);
 
         if(square.getPiece() == null){
@@ -173,7 +171,7 @@ public class StrategoGameState {
 
         //check if it's the player's turn (if not, then move is illegal), or if new square is out of range
         //also check if piece's team is the same as your team
-        if(!canMove(playerIndex) || !squareOnBoard(newX, newY) || piece.getTeam() != playerIndex){
+        if(!canMove(playerIndex) || !squareOnBoard(newRow, newCol) || piece.getTeam() != playerIndex){
             return false;
         }
 
@@ -185,32 +183,33 @@ public class StrategoGameState {
         } else if(piece.getRank() == 11 || piece.getRank() == 0){ //immobile pieces (cannot move)
             return false;
         }else{ //all other pieces have normal movement range (check if square is in range, and is moving at all)
-            if(newX > square.getxPos() + 1 || newX < square.getxPos() - 1 ||
-               newY > square.getyPos() + 1 || newY < square.getyPos() - 1 ||
-               (square.getxPos() == newX && square.getyPos() == newY)){
+            if(newRow > square.getRow() + 1 || newRow < square.getRow() - 1 ||
+               newCol > square.getCol() + 1 || newCol < square.getCol() - 1 ||
+               (square.getRow() == newRow && square.getCol() == newCol)){
+                Log.i("move", "square out of range");
                 return false;
             }
         }
 
         //if new coords are occupied by another piece (not null or player's), then attack
-        if(boardSquares[newX][newY].getOccupied() == true &&
-           (boardSquares[newX][newY].getPiece() == null ||
-           boardSquares[newX][newY].getPiece().getTeam() == playerIndex)){
+        if(boardSquares[newRow][newCol].getOccupied() == true &&
+           (boardSquares[newRow][newCol].getPiece() == null ||
+           boardSquares[newRow][newCol].getPiece().getTeam() == playerIndex)){
             //moving into occupied square that you cannot attack is an illegal move
             return false;
-        }else if(boardSquares[newX][newY].getOccupied() == true){
-            attack(square.getPiece(), boardSquares[newX][newY].getPiece(), playerIndex);    //note: if you do the return statement now then you can't move the piece later
+        }else if(boardSquares[newRow][newCol].getOccupied() == true){
+            attack(square.getPiece(), boardSquares[newRow][newCol].getPiece(), playerIndex);    //note: if you do the return statement now then you can't move the piece later
             //just in case both pieces are captured
-            if (boardSquares[newX][newY].getPiece().getCaptured()) {
-                boardSquares[newX][newY].setPiece(null);
-                boardSquares[newX][newY].setOccupied(false);
+            if (boardSquares[newRow][newCol].getPiece().getCaptured()) {
+                boardSquares[newRow][newCol].setPiece(null);
+                boardSquares[newRow][newCol].setOccupied(false);
             }
         }
 
         //check initial square/new square pieces for capture
         //update init/new square pieces appropriately
         if (!square.getPiece().getCaptured()) {
-            boardSquares[newX][newY].setPiece(square.getPiece());
+            boardSquares[newRow][newCol].setPiece(square.getPiece());
         }
         square.setPiece(null);
         square.setOccupied(false);
@@ -283,19 +282,19 @@ public class StrategoGameState {
      * assumes that it is able to move at all (turn is correct)
      * assumes that new square is in range of board
      * @param square initial board square that the scout piece is on
-     * @param newX x coord that you are trying to move the scout to
-     * @param newY y coord that you are trying to move the scout to
+     * @param newRow row that you are trying to move the scout to
+     * @param newCol column that you are trying to move the scout to
      * @return true if movement is valid, false if not
      */
-    public boolean scoutMove(BoardSquare square, int newX, int newY){
-        if(square.getxPos() != newX && square.getyPos() != newY){ //checking if square is not in straight line from init
+    public boolean scoutMove(BoardSquare square, int newRow, int newCol){
+        if(square.getRow() != newRow && square.getCol() != newCol){ //checking if square is not in straight line from init
             return false;
-        }else if(square.getxPos() == newX && square.getyPos() == newY){ //checking if square is exactly the same as init
+        }else if(square.getRow() == newRow && square.getCol() == newCol){ //checking if square is exactly the same as init
             return false;
-        }else if(square.getxPos() == newX){ //up/down movement
+        }else if(square.getRow() == newRow){ //up/down movement
             //first determine if y value of init square or new square is bigger (take difference)
             //use this to determine if step should be +1 or -1 in y direction (might have this flipped around)
-            int diff = square.getyPos() - newY;
+            int diff = square.getCol() - newCol;
             int step;
             if(diff > 0){ //means init square is lower on board than new square (moving up)
                 step = -1;
@@ -307,13 +306,13 @@ public class StrategoGameState {
 
             //use diff for for loop, for each square in the range (NOT inclusive of new square), check if occupied
             //if a square is occupied, then return false, else keep going
-            for(int i = square.getyPos(); i < newY; i += step){
-                if(getBoardSquares()[newX][i].getOccupied() == true){
+            for(int i = square.getCol(); i < newCol; i += step){
+                if(getBoardSquares()[newRow][i].getOccupied() == true){
                     return false;
                 }
             }
-        }else if(square.getyPos() == newY){ //left/right movement (same as up/down with x and y swapped)
-            int diff = square.getxPos() - newX;
+        }else if(square.getCol() == newCol){ //left/right movement (same as up/down with x and y swapped)
+            int diff = square.getRow() - newRow;
             int step;
             if(diff > 0){
                 step = -1;
@@ -325,8 +324,8 @@ public class StrategoGameState {
 
             //use diff for for loop, for each square in the range (NOT inclusive of new square), check if occupied
             //if a square is occupied, then return false, else keep going
-            for(int i = square.getxPos(); i < newX; i += step){
-                if(getBoardSquares()[i][newY].getOccupied() == true){
+            for(int i = square.getRow(); i < newRow; i += step){
+                if(getBoardSquares()[i][newCol].getOccupied() == true){
                     return false;
                 }
             }

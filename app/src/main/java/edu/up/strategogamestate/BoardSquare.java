@@ -8,22 +8,22 @@ public class BoardSquare {
     private boolean occupied;
     private boolean highlight;
     private GamePiece piece;
-    private int xPos;
-    private int yPos;
+    private int row;
+    private int col;
 
     /**
      * constructor for BoardSquare, sets instance variables to given values
      * @param occupied whether the square should be occupied or not
      * @param piece game piece on the square (null if none exists)
-     * @param xPos x coordinate of the square on the board
-     * @param yPos y coordinate of the square on the board
+     * @param row x coordinate of the square on the board
+     * @param col y coordinate of the square on the board
      */
-    public BoardSquare(boolean occupied, GamePiece piece, int xPos, int yPos){
+    public BoardSquare(boolean occupied, GamePiece piece, int row, int col){
         this.occupied = occupied;
         this.highlight = false;
         this.piece = piece;
-        this.xPos = xPos;
-        this.yPos = yPos;
+        this.row = row;
+        this.col = col;
     }
 
     /**
@@ -38,8 +38,8 @@ public class BoardSquare {
         } else {
             this.piece = new GamePiece(orig.piece);
         }
-        this.xPos = orig.xPos;
-        this.yPos = orig.yPos;
+        this.row = orig.row;
+        this.col = orig.col;
 
     }
 
@@ -53,11 +53,11 @@ public class BoardSquare {
     public GamePiece getPiece(){
         return piece;
     }
-    public int getxPos(){
-        return xPos;
+    public int getRow(){
+        return row;
     }
-    public int getyPos(){
-        return yPos;
+    public int getCol(){
+        return col;
     }
 
     public void setOccupied(boolean occupied) {
@@ -69,10 +69,10 @@ public class BoardSquare {
     public void setPiece(GamePiece piece) {
         this.piece = piece;
     }
-    public void setxPos(int xPos) {
-        this.xPos = xPos;
+    public void setRow(int row) {
+        this.row = row;
     }
-    public void setyPos(int yPos) {
-        this.yPos = yPos;
+    public void setCol(int col) {
+        this.col = col;
     }
 }
