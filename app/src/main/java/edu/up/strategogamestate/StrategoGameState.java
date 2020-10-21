@@ -148,8 +148,7 @@ public class StrategoGameState {
 
         for (int j = 0; j < BOARD_SIZE; j++) {
             for (int k = 0; k < BOARD_SIZE; k++) {
-                Log.i("Testing deep copy", "" + orig.getBoardSquares()[j][k]);
-                //this.boardSquares[j][k] = new BoardSquare(orig.getBoardSquares()[j][k]);
+                this.boardSquares[j][k] = new BoardSquare(orig.getBoardSquares()[j][k]);
             }
         }
 
@@ -353,11 +352,13 @@ public class StrategoGameState {
      * @return true if move was successfully undone, false otherwise
      */
     public boolean undo (StrategoGameState currGameState) {
+        /*
         if (currGameState == null || prevGameState == null) {
             return false;
         }
 
         currGameState = prevGameState;
+        */
         return true;
     }
 
@@ -392,11 +393,16 @@ public class StrategoGameState {
      * @return true if game state was successfully reset, false otherwise
      */
     public boolean reset(StrategoGameState currGameState) {
+        /*
         if (currGameState == null) {
             return false;
         }
         currGameState = new StrategoGameState();
+        */
+
         return true;
+
+
     }
 
     @Override

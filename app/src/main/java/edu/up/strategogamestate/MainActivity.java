@@ -26,6 +26,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         gameInfoLog = findViewById(R.id.gameInfoLog);
 
+        //gameInfoLog.setEnabled(false);
+
 
     }
 
@@ -50,17 +52,32 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         StrategoGameState thirdInstance = new StrategoGameState();
         StrategoGameState fourthInstance = new StrategoGameState(thirdInstance);
 
-        //TODO make sure new instances of the game state have the same board layout
 
         String tempSecondString = secondInstance.toString();
         String tempFourthString = fourthInstance.toString();
 
         if(tempSecondString.equals(tempFourthString)){
-            gameInfoLog.setText("The seperate deep copies match!");
+            gameInfoLog.setText("# The separate deep copies match!\n\n\n");
         }
 
         gameInfoLog.setText(gameInfoLog.getText().toString().concat(tempSecondString + "\n" + tempFourthString));
-        gameInfoLog.setText(gameState.toString());
+
+        //check undo
+        if(firstInstance.undo(firstInstance)){
+            gameInfoLog.setText(gameInfoLog.getText().toString().concat("\n\n# The undo was successful"));
+        }
+
+        //check reset
+        if(firstInstance.reset(firstInstance)){
+            gameInfoLog.setText(gameInfoLog.getText().toString().concat("\n\n# The reset was successful\n\n"));
+        }
+
+        //TODO fix move() to actually move piece (can be tested with below)
+        //move spy to square 1 above piece
+        //attack with other piece
+        firstInstance.move(firstInstance.getBoardSquares()[8][6], 8, 4, false );
+        gameInfoLog.setText(gameInfoLog.getText().toString().concat(firstInstance.toString()));
+
 
     }
 

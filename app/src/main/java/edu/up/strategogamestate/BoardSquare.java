@@ -40,6 +40,7 @@ public class BoardSquare {
         }
         this.xPos = orig.xPos;
         this.yPos = orig.yPos;
+
     }
 
     //getters and setters
