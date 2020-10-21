@@ -342,7 +342,7 @@ public class StrategoGameState {
      * @return true if square is within range of the board, false if not
      */
     public boolean squareOnBoard(int x, int y){
-        return (x > BOARD_SIZE || y > BOARD_SIZE || x < 0 || y < 0);
+        return !(x > BOARD_SIZE || y > BOARD_SIZE || x < 0 || y < 0);
     }
 
     /**
