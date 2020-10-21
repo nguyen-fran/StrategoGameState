@@ -167,12 +167,9 @@ public class StrategoGameState {
     public boolean move(BoardSquare square, int newRow, int newCol, boolean playerIndex){
         prevGameState = new StrategoGameState(this);
 
-        Log.i("move", "entered move");
         if(square.getPiece() == null){
             return false;
         }
-
-        Log.i("move", "not null piece");
 
         GamePiece piece = square.getPiece();
 
@@ -182,14 +179,12 @@ public class StrategoGameState {
             return false;
         }
 
-        Log.i("move", "basic error checking");
-
         //check if coordinates you want to move to are valid for piece (special exception for scout range, and immobile pieces)
         if(piece.getRank() == 2){ //checking validity for scout (special range)
-            Log.i("move", "is a scout");
-            return (scoutMove(square, newRow, newCol));
+            if (!scoutMove(square, newX, newY)) {
+                return false;
+            }
         } else if(piece.getRank() == 11 || piece.getRank() == 0){ //immobile pieces (cannot move)
-            Log.i("move", "is flag or bomb");
             return false;
         }else{ //all other pieces have normal movement range (check if square is in range, and is moving at all)
             if(newRow > square.getRow() + 1 || newRow < square.getRow() - 1 ||
@@ -199,9 +194,6 @@ public class StrategoGameState {
                 return false;
             }
         }
-
-        Log.i("move", "checked special pieces");
-
 
         //if new coords are occupied by another piece (not null or player's), then attack
         if(boardSquares[newRow][newCol].getOccupied() == true &&
@@ -218,8 +210,6 @@ public class StrategoGameState {
             }
         }
 
-        Log.i("move", "checked occupation");
-
         //check initial square/new square pieces for capture
         //update init/new square pieces appropriately
         if (!square.getPiece().getCaptured()) {
@@ -227,7 +217,6 @@ public class StrategoGameState {
         }
         square.setPiece(null);
         square.setOccupied(false);
-        Log.i("move", "leaving move");
 
         return true;
     }
