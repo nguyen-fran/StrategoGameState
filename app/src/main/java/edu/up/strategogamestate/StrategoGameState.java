@@ -165,30 +165,40 @@ public class StrategoGameState {
     public boolean move(BoardSquare square, int newX, int newY, boolean playerIndex){
         prevGameState = new StrategoGameState(this);
 
+        Log.i("move", "entered move");
         if(square.getPiece() == null){
             return false;
         }
+
+        Log.i("move", "not null piece");
 
         GamePiece piece = square.getPiece();
 
         //check if it's the player's turn (if not, then move is illegal), or if new square is out of range
         //also check if piece's team is the same as your team
-        if(!canMove(playerIndex) || !squareOnBoard(newX, newY) || piece.getTeam() != playerIndex){
+        if(!canMove(playerIndex) || squareOnBoard(newX, newY) || piece.getTeam() != playerIndex){
             return false;
         }
 
+        Log.i("move", "basic error checking");
+
         //check if coordinates you want to move to are valid for piece (special exception for scout range, and immobile pieces)
         if(piece.getRank() == 2){ //checking validity for scout (special range)
+            Log.i("move", "is a scout");
             return (scoutMove(square, newX, newY));
         } else if(piece.getRank() == 11 || piece.getRank() == 0){ //immobile pieces (cannot move)
+            Log.i("move", "is flag or bomb");
             return false;
         }else{ //all other pieces have normal movement range (check if square is in range, and is moving at all)
             if(newX > square.getxPos() + 1 || newX < square.getxPos() - 1 ||
                newY > square.getyPos() + 1 || newY < square.getyPos() - 1 ||
                (square.getxPos() == newX && square.getyPos() == newY)){
+                Log.i("move", "square out of range");
                 return false;
             }
         }
+
+        Log.i("move", "checked special pieces");
 
 
         //if new coords are occupied by another piece (not null or player's), then attack
@@ -206,6 +216,8 @@ public class StrategoGameState {
             }
         }
 
+        Log.i("move", "checked occupation");
+
         //check initial square/new square pieces for capture
         //update init/new square pieces appropriately
         if (!square.getPiece().getCaptured()) {
@@ -213,6 +225,7 @@ public class StrategoGameState {
         }
         square.setPiece(null);
         square.setOccupied(false);
+        Log.i("move", "leaving move");
 
         return true;
     }
